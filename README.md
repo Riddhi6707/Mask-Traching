@@ -20,7 +20,9 @@
 
 6.04.2021 - A performing model has been established as follows :
 
-            With offline training, the model is able to predict     instances segmentation with dice coefficient values above 0.80 
+            With offline training, the model is able to predict instances segmentation with dice coefficient values above 0.80 
             With online training during prediction, the model performs poorly when the first annotations is augmented. However, without augmentation, model can perform well and improves the offline training prediction
 
 Illustrative results have been added in the 'Results' folder
+
+Due to size restriction, no model could be uploaded
