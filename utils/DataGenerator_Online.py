@@ -58,7 +58,7 @@ class DataGen(Sequence):
 
 
 
-                    im_org = cv2.imread(os.path.join(selected_class_video,frame_ids[i]))  
+                    im_org = cv2.imread(os.path.join(selected_class_video,frame_ids[0]))  
                    # im_org.resize((self.img_height, self.img_width,im_org.shape[2]))
                     im_org = cv2.resize(im_org, (self.img_width,self.img_height), interpolation = cv2.INTER_AREA)
                     
@@ -67,22 +67,22 @@ class DataGen(Sequence):
                     label_path = os.path.splitext(label_path)[0]
                     label_path = label_path + ".png"
                     label_org = cv2.imread(label_path)
-                   # label_org.resize((self.img_height, self.img_width,label_org.shape[2])) 
-                    label_org = cv2.resize(label_org, (self.img_width,self.img_height), interpolation = cv2.INTER_AREA)
+                    #label_org.resize((self.img_height, self.img_width,label_org.shape[2]))  
+                    label_org = cv2.resize(label_org, (self.img_width,self.img_height), interpolation = cv2.INTER_AREA)                                   
                     label = cv2.cvtColor(label_org, cv2.COLOR_BGR2GRAY)   
                     k = (np.unique(label.flatten()))[0]
-                    _,im_label = cv2.threshold(label,(k+10),255,cv2.THRESH_BINARY)  
+                    _,im_label = cv2.threshold(label,0,255,cv2.THRESH_BINARY)  
                     
                     
-#                     aug = A.Compose([
-#                         A.VerticalFlip(p=0.5,height=self.img_height, width=self.img_width),              
-#                         A.RandomRotate90(p=0.5)])
+                    aug = A.Compose([
+                        A.VerticalFlip(p=0.5),A.HorizontalFlip(p=0.5)             
+                       ])
                         
-#                     np.random.seed(7)
-#                     augmented = aug(image=im_org, mask=im_label)
+                    np.random.seed(7)
+                    augmented = aug(image=im_org, mask=im_label)
                     
-#                     im = augmented['image']
-#                     im_label = augmented['mask']
+                    im = augmented['image']
+                    im_label = augmented['mask']
                     im_label = np.array(im_label,dtype = "float32")/255.0
                     
                     x = np.random.randint(0,5,1)
@@ -92,11 +92,11 @@ class DataGen(Sequence):
                     trans_thresh =  np.array(trans_thresh,dtype = "float32")/255.0                 
                     aug = A.ElasticTransform(p=1, alpha=20, sigma=30 * 0.05, alpha_affine=30 * 0.03)
                     np.random.seed(7)
-                    augmented = aug(image=im_org, mask= trans_thresh)
+                    augmented = aug(image=im, mask= trans_thresh)
                     mask_final = augmented['mask']
                     
                     im = np.array(im_org, dtype="float32") / 255.0 
-                    new = np.dstack((im, mask_final))
+                    new = np.dstack((im, im_label))
         
                         
                    

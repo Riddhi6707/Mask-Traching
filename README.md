@@ -26,3 +26,6 @@
 Illustrative results have been added in the 'Results' folder
 
 Due to size restriction, no model could be uploaded
+
+
+12.04.2021 - Bug found and corrected. Aprropriate results for a few trial cases added. 

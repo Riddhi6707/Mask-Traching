@@ -4,7 +4,7 @@ from tensorflow.keras.utils import Sequence
 import numpy as np
 import cv2
 import albumentations as A
-
+#np.random.seed(np.random.randint(5000))
 
 
 
@@ -27,7 +27,7 @@ class DataGen(Sequence):
     def __len__(self):
               
 # The batch_count should be atleast equal to the number of the video classes. Preferably multiple times of the no of classes.
-        return  self.batch_count #if self.batch_count >= len(os.listdir(self.image_dir)) else len(os.listdir(self.image_dir))
+        return  self.batch_count if self.batch_count >= len(os.listdir(self.image_dir)) else len(os.listdir(self.image_dir))
 
     def __getitem__(self, idx):
         
@@ -39,15 +39,18 @@ class DataGen(Sequence):
             
             self.batch_x =  np.zeros((self.batch_size, self.img_height, self.img_width, 4))
             self.batch_y = np.zeros((self.batch_size, self.img_height, self.img_width, 1))
-            idx = np.random.randint(0,len(self.classes))
-            self.class_count[idx] += 1
+            print(len(self.classes)-1)
+            ll = np.random.randint(0,(len(self.classes)-1),10)
+            idt =ll[0] 
+            print("idt:" ,ll)
+            self.class_count[idt] += 1
             
-            if self.class_count[idx] == np.floor(self.batch_count/len(os.listdir(self.image_dir))):
-                (self.classes).remove(str(self.classes[idx]))
-                self.class_count.pop(idx)
+            if self.class_count[idt] == np.floor(self.batch_count/len(os.listdir(self.image_dir))):
+                (self.classes).remove(str(self.classes[idt]))
+                self.class_count.pop(idt)
             
-            selected_class_video = os.path.join(self.image_dir,str(self.classes[idx]))
-            selected_class_mask =  os.path.join(self.mask_dir,str(self.classes[idx]))
+            selected_class_video = os.path.join(self.image_dir,str(self.classes[idt]))
+            selected_class_mask =  os.path.join(self.mask_dir,str(self.classes[idt]))
             
            
             frame_ids = os.listdir(selected_class_video)
@@ -107,7 +110,7 @@ class DataGen(Sequence):
             self.batch_x =  np.zeros((2, self.img_height, self.img_width, 4))
             self.batch_y = np.zeros((2, self.img_height, self.img_width, 1))
         
-            idx = np.random.randint(0,len(self.classes))
+            idx = np.random.randint(0,len(self.classes)-1)
            
             
             selected_class_video = os.path.join(self.image_dir,str(self.classes[idx]))

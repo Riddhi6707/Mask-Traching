@@ -28,19 +28,20 @@ def build_model(image_size,  class_count=1, BACKBONE = 'resnet18'):
     
 
         input_data = Input(image_size+(4,), dtype='float32')
-       # inp_3C = Conv2D(3, (1, 1))(input_data) 
+        inp_3C = Conv2D(3, (1, 1))(input_data) 
+      #  inp_3C= tf.keras.applications.resnet.preprocess_input(temp)
         
-        base_model = sm.Unet(backbone_name=BACKBONE,encoder_weights=None,input_shape=image_size + (4,))
+        base_model = sm.Unet(backbone_name=BACKBONE,encoder_weights='imagenet',input_shape=image_size + (3,))
              
-        out_data = base_model(input_data)
+        out_data = base_model(inp_3C)
         
         model = Model(inputs=input_data, outputs=out_data)
         
         loss = "binary_crossentropy" 
 
-        dice =  dice_coefficient  #sm.metrics.IOUScore() 
+        dice =  dice_coefficient #sm.metrics.IOUScore() 
         
-        opt = Adam(lr = .0002)
+        opt = Adam(lr = .0001)
         
         model.compile(optimizer=opt, loss=loss, metrics=[dice])
 
