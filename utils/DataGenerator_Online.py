@@ -89,7 +89,10 @@ class DataGen(Sequence):
                     y = np.random.randint(0,5,1)
                     M = np.float32([[1,0,x],[0,1,y]])
                     trans_thresh = cv2.warpAffine(im_label,M,( self.img_width,self.img_height))
-                    trans_thresh =  np.array(trans_thresh,dtype = "float32")/255.0                 
+                    a = random.randint(1,100)
+                    b = random.randint(1,100)
+                    c = random.randint(1,100)
+                    aug = A.ElasticTransform(p=1, alpha=a, sigma= b* 0.05, alpha_affine=c* 0.03)                
                     aug = A.ElasticTransform(p=1, alpha=20, sigma=30 * 0.05, alpha_affine=30 * 0.03)
                     np.random.seed(7)
                     augmented = aug(image=im, mask= trans_thresh)

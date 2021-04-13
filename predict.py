@@ -54,7 +54,10 @@ if __name__ == '__main__':
     #model = load_model(filename,custom_objects={'iou_score': sm.metrics.IOUScore()})
    # model =  tf.saved_model.load("models/")
     
-    frame_ids = os.listdir(test_vid)
+     im_path = os.path.join(test_vid,test_class)
+    
+    annot_path = os.path.join(test_mask,test_class)
+    frame_ids = os.listdir(im_path)
     
     if config.mode == 'online':
     
@@ -76,39 +79,39 @@ if __name__ == '__main__':
             im_org = cv2.resize(im_org, (image_width,image_height), interpolation = cv2.INTER_AREA)
             im = np.array(im_org, dtype="float32") / 255.0 
             
-            label_path = os.path.join(test_mask,frame_ids[0])
-            label_path = os.path.splitext(label_path)[0]
-            label_path = label_path + ".png"
-            label_org = cv2.imread(label_path)
-          #print(label_path)
-            label_org = cv2.resize(label_org, (image_width,image_height), interpolation = cv2.INTER_AREA)
+             #     label_path = os.path.join(annot_path,frame_ids[0])
+        #     label_path = os.path.splitext(label_path)[0]
+        #     label_path = label_path + ".png"
+        #     label_org = cv2.imread(label_path)
+        #   #print(label_path)
+        #     label_org = cv2.resize(label_org, (image_width,image_height), interpolation = cv2.INTER_AREA)
         
-            label = cv2.cvtColor(label_org, cv2.COLOR_BGR2GRAY)   
-        # k = (np.unique(label.flatten()))[0]
-            _,im_label = cv2.threshold(label,0,255,cv2.THRESH_BINARY) 
-            im_label = np.array(im_label,dtype = "float32")/255.0   
+        #     label = cv2.cvtColor(label_org, cv2.COLOR_BGR2GRAY)   
+        # # k = (np.unique(label.flatten()))[0]
+        #     _,im_label = cv2.threshold(label,0,255,cv2.THRESH_BINARY) 
+        #     im_label = np.array(im_label,dtype = "float32")/255.0   
            
-            # if i == 1:
-            #         label_path = os.path.join(test_mask,frame_ids[0])
-            #         label_path = os.path.splitext(label_path)[0]
-            #         label_path = label_path + ".png"
-            #         # print(label_path)
-            #         label_org = cv2.imread(label_path)
-            #         label_org = cv2.resize(label_org, (image_width,image_height), interpolation = cv2.INTER_AREA)
-            #         label = cv2.cvtColor(label_org, cv2.COLOR_BGR2GRAY)  
-            #         # print(np.unique(label.flatten()))
-            #         # k = (np.unique(label.flatten()))[0]
-            #         _,im_label = cv2.threshold(label,0,255,cv2.THRESH_BINARY) 
-            #         im_label = np.array(im_label,dtype = "float32")/255.0 
+            if i == 1:
+                    label_path = os.path.join(annot_path,frame_ids[0])
+                    label_path = os.path.splitext(label_path)[0]
+                    label_path = label_path + ".png"
+                    # print(label_path)
+                    label_org = cv2.imread(label_path)
+                    label_org = cv2.resize(label_org, (image_width,image_height), interpolation = cv2.INTER_AREA)
+                    label = cv2.cvtColor(label_org, cv2.COLOR_BGR2GRAY)  
+                    # print(np.unique(label.flatten()))
+                    # k = (np.unique(label.flatten()))[0]
+                    _,im_label = cv2.threshold(label,0,255,cv2.THRESH_BINARY) 
+                    im_label = np.array(im_label,dtype = "float32")/255.0 
 
-            # else :
-            #         label_path = os.path.join(Results, test_class) + "/offline/" + str(i-1) + ".png" 
+            else :
+                    label_path = os.path.join(Results, test_class) + "/offline/" + str(i-1) + ".png" 
                     
-            #        # print(label_path)
-            #         label_org = cv2.imread(label_path)
-            #         label = cv2.cvtColor(label_org, cv2.COLOR_BGR2GRAY) 
-            #         _,im_label = cv2.threshold(label,0,255,cv2.THRESH_BINARY) 
-            #         im_label = np.array(label,dtype = "float32")/255.0 
+                    # print(label_path)
+                    label_org = cv2.imread(label_path)
+                    label = cv2.cvtColor(label_org, cv2.COLOR_BGR2GRAY) 
+                    _,im_label = cv2.threshold(label,0,255,cv2.THRESH_BINARY) 
+                    im_label = np.array(label,dtype = "float32")/255.0 
                
             
             
